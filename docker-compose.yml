@@ -1,0 +1,43 @@
+services:
+  db:
+    container_name: postgres-db
+    image: postgres:16.6-bullseye
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 12345burnedout54321
+      POSTGRES_DB: burnedout
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d burnedout"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  next-app:
+    container_name: next-app
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    volumes:
+      - .:/app/next-app
+    restart: always
+    ports:
+      - 3000:3000
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file:
+      - .env
+    environment:
+      POSTGRES_ADDR: db
+      POSTGRES_DATABASE: burnedout
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 12345burnedout54321
+      DATABASE_URL: postgres://postgres:12345burnedout54321@db:5432/burnedout
+  
+volumes:
+  pgdata: {}
