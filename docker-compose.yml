@@ -4,11 +4,16 @@ services:
     image: postgres:16.6-bullseye
     restart: always
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: 12345burnedout54321
+      DB_URL: postgres://postgres:12345burnedout54321@db:5432/burnedout
+      DB_PORT: 5432
+      POSTGRES_HOST: db
       POSTGRES_DB: burnedout
+      POSTGRES_USERNAME: postgres
+      POSTGRES_PASSWORD: 12345burnedout54321
     ports:
       - "5432:5432"
+    profiles:
+      - db
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres -d burnedout"]
       interval: 10s
@@ -27,17 +32,18 @@ services:
     restart: always
     ports:
       - 3000:3000
-    depends_on:
-      db:
-        condition: service_healthy
+    # depends_on:
+    #   db:
+    #     condition: service_healthy
     env_file:
       - .env
     environment:
-      POSTGRES_ADDR: db
-      POSTGRES_DATABASE: burnedout
-      POSTGRES_USER: postgres
+      DB_URL: postgres://postgres:12345burnedout54321@db:5432/burnedout
+      DB_PORT: 5432
+      POSTGRES_HOST: db
+      POSTGRES_DB: burnedout
+      POSTGRES_USERNAME: postgres
       POSTGRES_PASSWORD: 12345burnedout54321
-      DATABASE_URL: postgres://postgres:12345burnedout54321@db:5432/burnedout
   
 volumes:
   pgdata: {}

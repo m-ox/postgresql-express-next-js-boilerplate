@@ -7,10 +7,10 @@ dotenv.config();
 const { Pool } = pg;
 
 const pool = new Pool({
-  user: process.env.DB_USER || 'postgres',
-  host: process.env.DB_HOST || 'db',
-  database: process.env.DB_NAME || 'boilerplate',
-  password: process.env.DB_PASSWORD || '12345boilerplate54321',
+  user: process.env.POSTGRES_USERNAME || 'postgres',
+  host: process.env.POSTGRES_HOST || 'localhost',
+  database: process.env.POSTGRES_DB || 'burnedout',
+  password: process.env.POSTGRES_PASSWORD || '12345burnedout54321',
   port: process.env.DB_PORT || 5432,
   max: 10,
   idleTimeoutMillis: 30000,

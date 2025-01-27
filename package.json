@@ -7,8 +7,13 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "start:db": "docker run --rm -p 5432:5432 -e POSTGRES_HOST_AUTH_METHOD=trust postgres",
-    "start:api": "bun run .server.js"
+    "drizzle:generate": "drizzle-kit generate",
+    "drizzle:migrate": "drizzle-kit migrate",
+    "db:isup": "docker exec postgres-db pg_isready -t 90",
+    "docker:up": "docker-compose -f docker-compose.yml up -d --build",
+    "docker:down": "docker-compose down --volumes",
+    "db:up": "docker-compose up -d db",
+    "db:init": "node ./drizzle/initdb.mjs"
   },
   "dependencies": {
     "cors": "^2.8.5",
